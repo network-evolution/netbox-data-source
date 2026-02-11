@@ -1,0 +1,9 @@
+---
+name: IN Defaults
+weight: 100
+description: Default config for Sydney site
+data:
+  dns_servers:
+    - 1.1.1.1
+  ntp_servers:
+    - 10.1.1.1
