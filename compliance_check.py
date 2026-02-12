@@ -5,8 +5,8 @@ from dcim.models import Device, Site
 class DeviceComplianceCheckBySite(Script):
 
     class Meta:
-        name = "Device Compliance Check (By Site)"
-        description = "Checks device compliance for selected site(s)"
+        name = "Device Compliance Check (Full Report by Site)"
+        description = "Reports compliant and non-compliant devices for selected site(s)"
 
     sites = MultiObjectVar(
         model=Site,
@@ -21,6 +21,7 @@ class DeviceComplianceCheckBySite(Script):
             self.log_info("No devices found in selected site(s)")
             return
 
+        compliant = 0
         non_compliant = 0
 
         for device in devices:
@@ -39,10 +40,17 @@ class DeviceComplianceCheckBySite(Script):
             if issues:
                 non_compliant += 1
                 self.log_warning(
-                    f"{device.name} ({device.site.name}): {', '.join(issues)}"
+                    f"NON-COMPLIANT | {device.name} ({device.site.name}) | "
+                    f"{', '.join(issues)}"
+                )
+            else:
+                compliant += 1
+                self.log_success(
+                    f"COMPLIANT | {device.name} ({device.site.name})"
                 )
 
-        self.log_success(
-            f"Compliance check completed. "
-            f"Non-compliant devices: {non_compliant} / {devices.count()}"
+        self.log_info(
+            f"Summary → Total: {devices.count()}, "
+            f"Compliant: {compliant}, "
+            f"Non-compliant: {non_compliant}"
         )
