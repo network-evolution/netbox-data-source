@@ -47,7 +47,7 @@ class BulkCreateDevicesWithPrefix(Script):
             device = Device(
                 name=device_name,
                 site=data["site"],
-                device_role=data["device_role"],
+                device_role=data["role"],
                 device_type=data["device_type"],
                 status="active",
             )
