@@ -6,8 +6,8 @@ from extras.models import Tag
 class TagDevicesByCompliance(Script):
 
     class Meta:
-        name = "Tag Devices by Compliance"
-        description = "Automatically tags devices as compliant or non-compliant"
+        name = "Tag Devices by Compliance (With Colors)"
+        description = "Automatically tags devices as compliant or non-compliant with colors"
 
     sites = MultiObjectVar(
         model=Site,
@@ -18,12 +18,14 @@ class TagDevicesByCompliance(Script):
 
         compliant_tag, _ = Tag.objects.get_or_create(
             name="compliant",
-            slug="compliant"
+            slug="compliant",
+            defaults={"color": "4caf50"}  # Green
         )
 
         non_compliant_tag, _ = Tag.objects.get_or_create(
             name="non-compliant",
-            slug="non-compliant"
+            slug="non-compliant",
+            defaults={"color": "f44336"}  # Red
         )
 
         devices = Device.objects.filter(site__in=data["sites"])
@@ -45,7 +47,7 @@ class TagDevicesByCompliance(Script):
             if not device.tenant:
                 issues.append("tenant")
 
-            # Remove old tags to avoid stale state
+            # Remove previous compliance tags to avoid stale state
             device.tags.remove(compliant_tag, non_compliant_tag)
 
             if issues:
