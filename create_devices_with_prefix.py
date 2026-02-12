@@ -22,7 +22,7 @@ class BulkCreateDevicesWithPrefix(Script):
         description="Target site"
     )
 
-    device_role = ObjectVar(
+    role = ObjectVar(
         model=DeviceRole,
         description="Device role"
     )
